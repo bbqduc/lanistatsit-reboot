@@ -7,7 +7,6 @@
               [lanistatsit.views :as views]
               [lanistatsit.config :as config]))
 
-
 (defn dev-setup []
   (when config/debug?
     (println "dev mode")

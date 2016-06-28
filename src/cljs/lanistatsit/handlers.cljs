@@ -6,3 +6,12 @@
  :initialize-db
  (fn  [_ _]
    db/default-db))
+
+(re-frame/register-handler
+  :set-sort
+  (fn  [db [_ sortkey]]
+    (let [flip (= (:sort-key db) sortkey)
+          new-reverse (if flip (not (:sort-reverse db)) true)]
+      (assoc db :sort-key sortkey 
+             :sort-reverse new-reverse)
+      )))
