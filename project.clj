@@ -6,9 +6,9 @@
                  [re-frame "0.7.0"]
                  [garden "1.3.2"]]
 
-  :plugins [[lein-cljsbuild "1.1.3"] 
+  :plugins [[lein-cljsbuild "1.1.3"]
             [lein-cljfmt "0.5.3"]
-            [lein-garden "0.2.8"]]
+            [lein-garden "0.2.6"]]
 
   :min-lein-version "2.5.3"
 
