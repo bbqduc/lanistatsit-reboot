@@ -20,8 +20,6 @@
   :profiles
   {:dev
    {:dependencies []
-
-            ;;
     :plugins      [[lein-figwheel "0.5.4-3"]
                    [lein-cljfmt "0.5.3"]]
     }}
