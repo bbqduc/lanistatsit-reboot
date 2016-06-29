@@ -14,7 +14,7 @@
    ])
 
 (defn herostats-header-cell [key]
-  [:td 
+  [:th 
    {:on-click #(re-frame/dispatch [:set-sort key])} 
    (clojure.string/capitalize (name key))])
 
@@ -22,7 +22,7 @@
   (let [heroes (re-frame/subscribe [:table-data])]
     (fn []
       (let [statkeys (keys (first @heroes))]
-        [:table 
+        [:table {:id "herostats"}
          [:tr
           (for [statkey statkeys]
             (herostats-header-cell statkey))]
@@ -36,18 +36,18 @@
   (let [lan (:lan stats)
         wins (:wins stats)
         losses (:losses stats)]
-      [:div 
-       [:ul 
-        [:li lan]
+    [:div {:id "lanlistentry"}
+       lan
+       [:ul {:id "lanlist"}
         [:li (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses))))]
-        [:li wins "/" losses]
+        [:li (str wins "/" losses)]
         ]]))
 
 (defn lan-list [lans]
   (fn []
-    [:ul
+    [:div {:id "lanlist"}
      (for [lan lans]
-       ^{:key lan} [:li (test-statsbox lan)])
+       ^{:key lan} (test-statsbox lan))
      ]
     ))
 

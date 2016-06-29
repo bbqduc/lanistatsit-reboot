@@ -4,11 +4,10 @@
                  [reagent "0.5.1"]
                  [binaryage/devtools "0.6.1"]
                  [re-frame "0.7.0"]
-                 [garden "1.3.2"]]
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.3"] 
-            [lein-cljfmt "0.5.3"]
-            [lein-garden "0.2.8"]]
+            ]
 
   :min-lein-version "2.5.3"
 
@@ -18,17 +17,13 @@
 
   :figwheel {:css-dirs ["resources/public/css"]}
 
-  :garden {:builds [{:id  "screen"
-                     :source-paths ["src/clj"]
-                     :stylesheet lanistatsit.css/screen
-                     :compiler {:output-to "resources/public/css/screen.css"
-                                :pretty-print? true}}]}
-
   :profiles
   {:dev
    {:dependencies []
 
-    :plugins      [[lein-figwheel "0.5.4-3"]]
+            ;;
+    :plugins      [[lein-figwheel "0.5.4-3"]
+                   [lein-cljfmt "0.5.3"]]
     }}
 
   :cljsbuild
