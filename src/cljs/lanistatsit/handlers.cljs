@@ -9,11 +9,14 @@
 
 (re-frame/register-handler
   :set-sort
-  (fn  [db [_ sortkey]]
-    (let [flip (= (:sort-key db) sortkey)
-          new-reverse (if flip (not (:sort-reverse db)) true)]
-      (assoc db :sort-key sortkey 
-             :sort-reverse new-reverse)
+  (fn  [db [_ newkey dbkey]]
+    (let [oldinfo (get db dbkey)
+          oldkey (:sort-key oldinfo)
+          oldreverse (:sort-reverse oldinfo)
+          flip (= oldkey newkey)
+          newreverse (if flip (not oldreverse) true)]
+      (assoc db dbkey {:sort-key newkey 
+                       :sort-reverse newreverse})
       )))
 
 (re-frame/register-handler
