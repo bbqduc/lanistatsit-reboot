@@ -55,4 +55,9 @@
   [:div
    [lan-list lans]
    [herostats-table]
-   ])
+   [:a {:href "/#halloo"} "hallo world"]])
+
+(defn halloo []
+  [:div
+   [:h1 "Halloota"]
+   [:a {:href "/#"} "Home"]])
