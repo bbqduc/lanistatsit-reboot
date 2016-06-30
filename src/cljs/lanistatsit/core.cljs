@@ -13,10 +13,8 @@
     (println "dev mode")
     (devtools/install!)))
 
-(def app-state (reagent/atom {}))
-
 (defn mount-root []
-  (reagent/render [routes/current]
+  (reagent/render [views/current-view]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []

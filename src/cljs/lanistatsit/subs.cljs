@@ -23,6 +23,11 @@
     (reaction (:data @db))))
 
 (re-frame/register-sub
+  :current-view
+  (fn [db _]
+    (reaction (:view @db))))
+
+(re-frame/register-sub
   :table-data
   (fn [db _]
     (let [sort-key (re-frame/subscribe [:sort-key])

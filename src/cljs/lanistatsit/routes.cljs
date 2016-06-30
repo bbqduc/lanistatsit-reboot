@@ -3,6 +3,7 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [lanistatsit.views :as views]
+            [re-frame.core :as re-frame]
             )
   (:import goog.History))
 
@@ -17,15 +18,7 @@
 (defn init-routes []
   (secretary/set-config! :prefix "#")
   (defroute "/" []
-    (swap! lanistatsit.core/app-state assoc :page :home))
+    (re-frame/dispatch [:set-current-view :home]))
   (defroute "/halloo" []
-    (swap! lanistatsit.core/app-state assoc :page :halloo))
+    (re-frame/dispatch [:set-current-view :halloo]))
   (hook-browser-navigation!))
-
-(defmulti current #(@lanistatsit.core/app-state :page))
-(defmethod current :home []
-  (views/main-panel))
-(defmethod current :halloo []
-  (views/halloo))
-(defmethod current :default []
-  (views/main-panel))

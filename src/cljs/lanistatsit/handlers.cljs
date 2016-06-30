@@ -15,3 +15,8 @@
       (assoc db :sort-key sortkey 
              :sort-reverse new-reverse)
       )))
+
+(re-frame/register-handler
+ :set-current-view
+ (fn  [db [_ view]]
+   (assoc db :view view)))

@@ -51,7 +51,7 @@
      ]
     ))
 
-(defn main-panel []
+(defn index []
   [:div
    [lan-list lans]
    [herostats-table]
@@ -61,3 +61,16 @@
   [:div
    [:h1 "Halloota"]
    [:a {:href "/#"} "Home"]])
+
+(defmulti views identity)
+(defmethod views :home [] [index])
+(defmethod views :halloo [] [halloo])
+(defmethod views :default [] [index])
+
+(defn show-view [view]
+  [views view])
+
+(defn current-view []
+  (let [current (re-frame/subscribe [:current-view])]
+    (fn []
+      [show-view @current])))
