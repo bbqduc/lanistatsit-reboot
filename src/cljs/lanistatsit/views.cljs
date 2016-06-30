@@ -56,14 +56,19 @@
 (defn index []
   [:div
    [lan-list lans]
-   [sortable-table :data :herostats-table 
-    [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
-     {:key :wins}
-     {:key :losses}] 
-    {:id "herostats"}]
-   [sortable-table :players :players-table
-    [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]
-    {:id "herostats"}]
+   [:div {:id "herostatslabel"}
+    "Hero stats for all LANs"]
+    [sortable-table :data :herostats-table 
+     [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
+      {:key :wins}
+      {:key :losses}] 
+     {:id "herostats"}]
+   [:div {:id "playerstatslabel"}
+    "Player stats for all LANs"
+    [sortable-table :players :players-table
+     [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]
+     {:id "herostats"}]
+    ]
    [:a {:href "/#halloo"} "hallo world"]])
 
 (defn halloo []
