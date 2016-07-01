@@ -5,6 +5,7 @@
                  [binaryage/devtools "0.6.1"]
                  [re-frame "0.7.0"]
                  [secretary "1.2.3"]
+		 [cljs-ajax "0.5.8"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.3"]]
