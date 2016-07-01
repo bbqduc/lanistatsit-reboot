@@ -3,16 +3,15 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [lanistatsit.views :as views]
-            [re-frame.core :as re-frame]
-            )
+            [re-frame.core :as re-frame])
   (:import goog.History))
 
 (defn hook-browser-navigation! []
   (doto (History.)
     (events/listen
-      EventType/NAVIGATE
-      (fn [event]
-        (secretary/dispatch! (.-token event))))
+     EventType/NAVIGATE
+     (fn [event]
+       (secretary/dispatch! (.-token event))))
     (.setEnabled true)))
 
 (defn init-routes []
