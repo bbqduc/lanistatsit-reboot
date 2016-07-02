@@ -1,16 +1,16 @@
-ul#lanlist {
+ul.lanlist {
 	list-style-type: none;
 	padding-left: 15px
 }
 
-div#lanlist {
+div.lanlist {
 	display: flex;
 }
-div#lanlistentry:hover {
+div.lanlistentry:hover {
 	background-color: lightblue;
 }
 
-table#herostats,th,td {
+table.herostats,th,td {
 	border-bottom: 1px solid #ddd;
 	border-collapse: collapse;
 }
