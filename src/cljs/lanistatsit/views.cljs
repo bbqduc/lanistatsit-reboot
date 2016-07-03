@@ -1,32 +1,36 @@
 (ns lanistatsit.views
   (:require [re-frame.core :as re-frame]
             [goog.string :as gstring]
-            [goog.string.format]))
+            [goog.string.format]
+            [lanistatsit.key :refer [gen-key]]
+            ))
 
 (defonce lans [{:lan "Lan 1", :wins 10, :losses 8}
                {:lan "Lan 2", :wins 15, :losses 11}])
 
 (defn sortable-table-row [data data-keys]
-  [:tr
+  ^{:key (gen-key)} [:tr
    (for [data-key data-keys]
      (let [trans (:transform data-key)
-           value (get data (:key data-key))]
-       [:td (if (nil? trans) value (trans value))]))])
+           value (get data (:key data-key))
+           content (if (nil? trans) value (trans value))]
+       ^{:key (gen-key)} [:td content]))])
 
 (defn sortable-table-header-cell [table-id data-key]
-  [:th
+  ^{:key (name data-key)} [:th
    {:on-click #(re-frame/dispatch [:set-sort data-key table-id])}
    (clojure.string/capitalize (name data-key))])
 
 (defn sortable-table [data-id table-id data-keys table-modifiers]
   (fn []
-    (let [data-sub (re-frame/subscribe [:table-data data-id table-id])]
-      [:table table-modifiers
-       [:tr
-        (for [data-key (map #(get-in % [:key]) data-keys)]
-          (sortable-table-header-cell table-id data-key))]
-       (for [data @data-sub]
-         (sortable-table-row data data-keys))])))
+    [:table table-modifiers
+     [:thead
+      (for [data-key (map #(get-in % [:key]) data-keys)]
+        (sortable-table-header-cell table-id data-key))]
+     [:tbody
+      (let [data-sub (re-frame/subscribe [:table-data data-id table-id])]
+        (for [data @data-sub]
+          (sortable-table-row data data-keys)))]]))
 
 (defn percentage-string [percentage]
   (str (* 100 percentage) "%"))
@@ -35,11 +39,11 @@
   (let [lan (:lan stats)
         wins (:wins stats)
         losses (:losses stats)]
-    [:div {:class "lanlistentry"}
-     [:a {:href (str "/lans/" lan)} lan]
-     [:ul {:class "lanlist"}
-      [:li (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses))))]
-      [:li (str wins "/" losses)]]]))
+    [:div {:class "lanlistentry" :key (gen-key)}
+     [:a {:href (str "/lans/" lan) :key (gen-key)} lan]
+     [:ul {:class "lanlist" :key (gen-key)}
+      [:li {:key (gen-key)} (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses))))]
+      [:li {:key (gen-key)} (str wins "/" losses)]]]))
 
 (defn lan-list [lans]
   (fn []
