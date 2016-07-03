@@ -5,10 +5,11 @@
                  [binaryage/devtools "0.6.1"]
                  [re-frame "0.7.0"]
                  [secretary "1.2.3"]
-		 [cljs-ajax "0.5.8"]
+                 [cljs-ajax "0.5.8"]
                  ]
 
-  :plugins [[lein-cljsbuild "1.1.3"]]
+  :plugins [[lein-cljsbuild "1.1.3"]
+            [cider/cider-nrepl "0.12.0"]]
 
   :min-lein-version "2.5.3"
 
@@ -16,11 +17,17 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:nrepl-port 9999
+             :nrepl-middleware ["cider.nrepl/cider-middleware"
+                                "cemerick.piggieback/wrap-cljs-repl"]
+             :css-dirs ["resources/public/css"]}
 
   :profiles
   {:dev
-   {:dependencies []
+   {:dependencies [[figwheel-sidecar "0.5.2"]
+                   [com.cemerick/piggieback "0.2.1"]
+                   [org.clojure/tools.nrepl "0.2.10"]]
+    :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
     :plugins      [[lein-figwheel "0.5.4-3"]
                    [lein-cljfmt "0.5.3"]]
     }}
