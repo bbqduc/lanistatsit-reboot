@@ -1,14 +1,14 @@
 table > thead > tr > th {
 	text-transform: capitalize;
 }
-ul.lanlist {
+ul#lanlist {
 	list-style-type: none;
 	padding-left: 15px
 }
-div.lanlist {
+div#lanlist {
 	display: flex;
 }
-div.lanlistentry:hover {
+div#lanlistentry:hover {
 	background-color: lightblue;
 }
 
