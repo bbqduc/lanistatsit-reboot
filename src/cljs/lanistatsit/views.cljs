@@ -49,29 +49,29 @@
   (let [lan (:lan stats)
         wins (:wins stats)
         losses (:losses stats)]
-    [:div#lanlistentry {:key lan}
+    [:div.lanlistentry {:key lan}
      [:a {:href (str "/lans/" lan) :key (str "a_" lan)} lan]
-     [:ul#lanlist {:key (str "ul_" lan)}
+     [:ul.lanlist {:key (str "ul_" lan)}
       [:li {:key "winrate"} (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses))))]
       [:li {:key "winslosses"} (str wins "/" losses)]]]))
 
 (defn lan-list [lans]
   (fn []
-    [:div#lanlist
+    [:div.lanlist
      (for [lan lans]
        ^{:key lan} (test-statsbox lan))]))
 
 (defn index []
   [:div
    [lan-list lans]
-   [:div#herostatslabel
+   [:div.herostatslabel
     "Hero stats for all LANs"]
    [sortable-table :data :herostats-table
     [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
      {:key :wins}
      {:key :losses}]
     {:class "herostats"}]
-   [:div#playerstatslabel
+   [:div.playerstatslabel
     "Player stats for all LANs"
     [sortable-table :players :players-table
      [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]
