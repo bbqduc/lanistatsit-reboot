@@ -30,7 +30,7 @@
 
 (defn sortable-table [data-id table-id data-keys table-modifiers]
   (fn []
-    [:table table-modifiers
+    [:table.w3-table.w3-striped.w3-white table-modifiers
        [:thead
         (let [data-sub (re-frame/subscribe [:table-data data-id table-id])
               sort-key (:sort-key (meta @data-sub))
@@ -49,34 +49,39 @@
   (let [lan (:lan stats)
         wins (:wins stats)
         losses (:losses stats)]
-    [:div {:class "lanlistentry" :key lan}
-     [:a {:href (str "/lans/" lan) :key (str "a_" lan)} lan]
-     [:ul {:class "lanlist" :key (str "ul_" lan)}
-      [:li {:key "winrate"} (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses))))]
-      [:li {:key "winslosses"} (str wins "/" losses)]]]))
+    [:div
+     [:div.w3-right
+      [:h4 (gstring/format "%.2f%" (percentage-string (/ wins (+ wins losses))))]
+      [:h4 (str wins "/" losses)]]
+     [:div.w3-clear]
+     [:a {:href (str "/lans/" lan)} [:h4 lan]]]))
 
 (defn lan-list [lans]
   (fn []
-    [:div {:class "lanlist"}
+    [:div.w3-row-padding.w3-margin-bottom
+     [:h4 "Winrates"]
      (for [lan lans]
-       ^{:key lan} (test-statsbox lan))]))
+       [:div.w3-quarter {:key (str "q_" lan)}
+        [:div.w3-container.w3-red.w3-padding-16
+         [:div.w3-left
+          [:i.fa.fa-bar-chart.w3-xxxlarge]]
+          ^{:key lan} (test-statsbox lan)]])]))
 
 (defn index []
   [:div
    [lan-list lans]
-   [:div {:class "herostatslabel"}
-    "Hero stats for all LANs"]
-   [sortable-table :data :herostats-table
-    [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
-     {:key :wins}
-     {:key :losses}]
-    {:class "herostats"}]
-   [:div {:id "playerstatslabel"}
-    "Player stats for all LANs"
+   [:div.w3-container.w3-row-padding
+    [:h4 "Hero stats for all LANs"]
+    [sortable-table :data :herostats-table
+     [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
+      {:key :wins}
+      {:key :losses}]]]
+   [:div.w3-container.w3-row-padding {:id "playerstatslabel"}
+    [:h4 "Player stats for all LANs"]
     [sortable-table :players :players-table
      [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]
-     {:class "herostats"}]]
-   [:a {:href "/#halloo"} "hallo world"]])
+     {:class "herostats"}]]])
+   ;[:a {:href "/#halloo"} "hallo world"]])
 
 (defn halloo []
   [:div

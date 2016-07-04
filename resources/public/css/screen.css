@@ -1,10 +1,6 @@
 table > thead > tr > th {
 	text-transform: capitalize;
 }
-ul.lanlist {
-	list-style-type: none;
-	padding-left: 15px
-}
 div.lanlist {
 	display: flex;
 }
@@ -17,14 +13,8 @@ table.herostats,th,td {
 	border-collapse: collapse;
 }
 
-td {
-	min-width: 100px;
-}
-
-tr:nth-child(odd) {background-color: #f5f5f5;}
-
 tr:hover {
-	background-color: #e5e5e5;
+	background-color: #e5e5e5 !important;
 }
 
 .sort-icon {
