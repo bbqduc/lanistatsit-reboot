@@ -70,13 +70,13 @@
 (defn index []
   [:div
    [lan-list lans]
-   [:div.w3-container.w3-row-padding
+   [:div.w3-container.w3-row-padding.w3-margin-bottom
     [:h4 "Hero stats for all LANs"]
     [sortable-table :data :herostats-table
      [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
       {:key :wins}
       {:key :losses}]]]
-   [:div.w3-container.w3-row-padding {:id "playerstatslabel"}
+   [:div.w3-container.w3-row-padding.w3-margin-bottom {:id "playerstatslabel"}
     [:h4 "Player stats for all LANs"]
     [sortable-table :players :players-table
      [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]
