@@ -1,8 +1,10 @@
+table > thead > tr > th {
+	text-transform: capitalize;
+}
 ul.lanlist {
 	list-style-type: none;
 	padding-left: 15px
 }
-
 div.lanlist {
 	display: flex;
 }

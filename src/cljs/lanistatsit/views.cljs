@@ -19,7 +19,7 @@
 (defn sortable-table-header-cell [table-id data-key]
   ^{:key (name data-key)} [:th
    {:on-click #(re-frame/dispatch [:set-sort data-key table-id])}
-   (clojure.string/capitalize (name data-key))])
+   (name data-key)])
 
 (defn sortable-table [data-id table-id data-keys table-modifiers]
   (fn []
