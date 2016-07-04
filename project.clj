@@ -56,7 +56,7 @@
                 :source-paths ["test"]
                 :compiler {:output-to "target/testable.js"
                            :output-dir "target"
-                           :main 'test.test-runner
+                           :main test.test-runner
                            :optimizations :none
                            :cache-analysis false
                            :pretty-print true}}
