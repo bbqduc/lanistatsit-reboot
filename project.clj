@@ -9,7 +9,8 @@
                  ]
 
   :plugins [[lein-cljsbuild "1.1.3"]
-            [cider/cider-nrepl "0.12.0"]]
+            [cider/cider-nrepl "0.12.0"]
+            [lein-doo "0.1.6"]]
 
   :min-lein-version "2.5.3"
 
@@ -26,31 +27,38 @@
   {:dev
    {:dependencies [[figwheel-sidecar "0.5.2"]
                    [com.cemerick/piggieback "0.2.1"]
-                   [org.clojure/tools.nrepl "0.2.10"]]
+                   [org.clojure/tools.nrepl "0.2.10"]
+                   ]
     :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
     :plugins      [[lein-figwheel "0.5.4-3"]
                    [lein-cljfmt "0.5.3"]]
     }}
 
-  :cljsbuild
-  {:builds
-   [{:id           "dev"
-     :source-paths ["src/cljs"]
-     :figwheel     {:on-jsload "lanistatsit.core/mount-root"}
-     :compiler     {:main                 lanistatsit.core
-                    :output-to            "resources/public/js/compiled/app.js"
-                    :output-dir           "resources/public/js/compiled/out"
-                    :asset-path           "js/compiled/out"
-                    :source-map-timestamp true}}
+  :cljsbuild {:builds
+              [{:id           "dev"
+                :source-paths ["src/cljs"]
+                :figwheel     {:on-jsload "lanistatsit.core/mount-root"}
+                :compiler     {:main                 lanistatsit.core
+                               :output-to            "resources/public/js/compiled/app.js"
+                               :output-dir           "resources/public/js/compiled/out"
+                               :asset-path           "js/compiled/out"
+                               :source-map-timestamp true}}
 
-    {:id           "min"
-     :source-paths ["src/cljs"]
-     :compiler     {:main            lanistatsit.core
-                    :output-to       "resources/public/js/compiled/app.js"
-                    :optimizations   :advanced
-                    :closure-defines {goog.DEBUG false}
-                    :pretty-print    false}}
+               {:id           "min"
+                :source-paths ["src/cljs"]
+                :compiler     {:main            lanistatsit.core
+                               :output-to       "resources/public/js/compiled/app.js"
+                               :optimizations   :advanced
+                               :closure-defines {goog.DEBUG false}
+                               :pretty-print    false}}
 
-    ]}
-
+               {:id "test"
+                :source-paths ["test"]
+                :compiler {:output-to "target/testable.js"
+                           :output-dir "target"
+                           :main 'test.test-runner
+                           :optimizations :none
+                           :cache-analysis false
+                           :pretty-print true}}
+               ]}
   )

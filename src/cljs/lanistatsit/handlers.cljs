@@ -8,16 +8,22 @@
  (fn  [_ _]
    db/default-db))
 
+(defn set-sort-handler
+  "Sets up the sorting key for a list"
+  [db newkey dbkey]
+  (let [oldinfo (get db dbkey)
+        oldkey (:sort-key oldinfo)
+        oldreverse (:sort-reverse oldinfo)
+        flip (= oldkey newkey)
+        newreverse (if flip (not oldreverse) true)]
+    (if (= oldkey nil) db
+      (assoc db dbkey {:sort-key newkey
+                       :sort-reverse newreverse}))))
+
 (re-frame/register-handler
  :set-sort
  (fn  [db [_ newkey dbkey]]
-   (let [oldinfo (get db dbkey)
-         oldkey (:sort-key oldinfo)
-         oldreverse (:sort-reverse oldinfo)
-         flip (= oldkey newkey)
-         newreverse (if flip (not oldreverse) true)]
-     (assoc db dbkey {:sort-key newkey
-                      :sort-reverse newreverse}))))
+   (set-sort-handler db newkey dbkey)))
 
 (re-frame/register-handler
  :request-hero-stats
