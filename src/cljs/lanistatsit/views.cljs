@@ -15,21 +15,32 @@
            content (if (nil? trans) value (trans value))]
        ^{:key (name (:key data-key))} [:td content]))])
 
-(defn sortable-table-header-cell [table-id data-key]
-  ^{:key (name data-key)} [:th
+(defn sort-icon
+  "Sorting icon for lists"
+  [reversed?]
+  (if reversed? "\u25bc" "\u25b2"))
+
+(defn sortable-table-header-cell [table-id data-key sort-key reversed?]
+  ^{:key (name data-key)}
+  [:th
    {:on-click #(re-frame/dispatch [:set-sort data-key table-id])}
-   (clojure.string/capitalize (name data-key))])
+   (name data-key)
+   (let [icon (if (= (name sort-key) (name data-key)) (sort-icon reversed?) "")]
+     [:span {:class "sort-icon"} icon])])
 
 (defn sortable-table [data-id table-id data-keys table-modifiers]
   (fn []
     [:table table-modifiers
-     [:thead
-      (for [data-key (map #(get-in % [:key]) data-keys)]
-        (sortable-table-header-cell table-id data-key))]
-     [:tbody
-      (let [data-sub (re-frame/subscribe [:table-data data-id table-id])]
-        (map-indexed #(sortable-table-row %2 data-keys %1) @data-sub)
-        )]]))
+       [:thead
+        (let [data-sub (re-frame/subscribe [:table-data data-id table-id])
+              sort-key (:sort-key (meta @data-sub))
+              reversed? (:reverse (meta @data-sub))]
+          (for [data-key (map #(get-in % [:key]) data-keys)]
+            (sortable-table-header-cell table-id data-key sort-key reversed?)))]
+       [:tbody
+        (let [data-sub (re-frame/subscribe [:table-data data-id table-id])]
+          (map-indexed #(sortable-table-row %2 data-keys %1) @data-sub)
+          )]]))
 
 (defn percentage-string [percentage]
   (str (* 100 percentage) "%"))
