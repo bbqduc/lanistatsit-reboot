@@ -27,11 +27,13 @@
 
 (defn sortable-table-header-cell [table-id data-key sort-key reversed?]
   ^{:key (name data-key)}
-  [:th
-   {:on-click #(re-frame/dispatch [:set-sort data-key table-id])}
-   (name data-key)
-   (let [icon (if (= (name sort-key) (name data-key)) (sort-icon reversed?) "")]
-     [:span.sort-icon icon])])
+  [:th.header
+   [:div [:span {:on-click #(re-frame/dispatch [:set-sort data-key table-id])}
+          (name data-key)
+          (let [icon (if (= (name sort-key) (name data-key)) (sort-icon reversed?) "")]
+            [:span.sort-icon icon])]
+    (when (= data-key :name) [:input.headerinput {:type "text"
+                                                  :on-change #(re-frame/dispatch [:set-table-filter table-id (-> % .-target .-value)])}])]])
 
 (defn sortable-table [data-id table-id data-keys table-modifiers]
   (let [sub (re-frame/subscribe [:table-data data-id table-id])]

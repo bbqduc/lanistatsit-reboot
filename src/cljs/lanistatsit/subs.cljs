@@ -27,9 +27,23 @@
     (:players @db))))
 
 (re-frame/register-sub
+ :filtered-data
+ (fn [db [_ data-key filter-keys]]
+   (let [data-sub (re-frame/subscribe [data-key])]
+     (reaction
+      (let [filterstring (get-in @db filter-keys)
+            data @data-sub]
+        (if (empty? filterstring)
+          data
+          (filter #(re-find (re-pattern (str "(?i)" filterstring)) (:name %))
+                  data)
+          ))))))
+
+(re-frame/register-sub
  :table-data
  (fn [db [_ data-key table-info-key]]
-   (let [data-sub (re-frame/subscribe [data-key])]
+   ;(let [data-sub (re-frame/subscribe [data-key])]
+   (let [data-sub (re-frame/subscribe [:filtered-data data-key [table-info-key :filter]])]
      (reaction
       (let [table-info (get @db table-info-key)
             newdata (sort-by (:sort-key table-info) @data-sub)

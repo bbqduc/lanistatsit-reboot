@@ -63,6 +63,13 @@
          db))))
 
 (re-frame/register-handler
+ :set-table-filter
+ (fn [db [_ table-id value]]
+   (assoc db table-id
+          (assoc (get db table-id)
+                 :filter value))))
+
+(re-frame/register-handler
  :set-current-view
  (fn  [db [_ view]]
    (assoc db :view view)))
