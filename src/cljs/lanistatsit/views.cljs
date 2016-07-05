@@ -96,7 +96,7 @@
   []
   (let [menu-display-css (re-frame/subscribe [:menu-display-css])]
     [:nav.w3-sidenav.w3-collapse.w3-white.w3-animate-left {:style {:zIndex 3 :width "300px" :display @menu-display-css}}
-     [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:href "#" :title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
+     [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
       [:i.fa.fa-remove.fa-fw] "Close Menu"]
      (doall (for [route lanistatsit.routes/route-definitions]
        (side-navigation-item route)))]))
