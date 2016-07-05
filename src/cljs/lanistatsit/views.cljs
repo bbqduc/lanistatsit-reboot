@@ -90,7 +90,6 @@
   [def]
   (let [active (re-frame/subscribe [:current-view])]
     (fn []
-      ^{:key (:href def)}
       [:a.w3-padding {:href (str "/#" (.substr (:href def) 1)) :class (if (= (:view def) @active) "w3-blue" "")}
        [:i.fa {:class (view-nav-icon (:view def))}]
        (str " " (:text def))])))
@@ -104,7 +103,7 @@
        [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
         [:i.fa.fa-remove.fa-fw] "Close Menu"]
        (doall (for [route lanistatsit.routes/route-definitions]
-                [side-navigation-item route]))])))
+                ^{:key (:href route)} [side-navigation-item route]))])))
 
 (defn side-navigation-overlay
   "Dark overlay that is visible on small screens when the side navigation is open.
