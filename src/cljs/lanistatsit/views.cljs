@@ -7,6 +7,12 @@
 (defonce lans-data [{:lan "Lan 1", :wins 10, :losses 8}
                     {:lan "Lan 2", :wins 15, :losses 11}])
 
+(defmulti view-nav-icon identity)
+(defmethod view-nav-icon :home [] "fa-dashboard")
+(defmethod view-nav-icon :heroes [] "fa-eye")
+(defmethod view-nav-icon :players []"fa-users")
+(defmethod view-nav-icon :lans [] "fa-bullseye")
+
 (defn sortable-table-row [data data-keys id]
   ^{:key id} [:tr
    (for [data-key data-keys]
@@ -76,6 +82,15 @@
     " Menu"]
    [:span.w3-right "Lanistatsit"]])
 
+(defn side-navigation-item
+  "One entry for the side navigation bar"
+  [def]
+  (let [active (re-frame/subscribe [:current-view])]
+    ^{:key (:href def)}
+    [:a.w3-padding {:href (str "/#" (.substr (:href def) 1)) :class (if (= (:view def) @active) "w3-blue" "")}
+     [:i.fa {:class (view-nav-icon (:view def))}]
+     (str " " (:text def))]))
+
 (defn side-navigation
   "Side navigation bar"
   []
@@ -83,18 +98,8 @@
     [:nav.w3-sidenav.w3-collapse.w3-white.w3-animate-left {:style {:zIndex 3 :width "300px" :display @menu-display-css}}
      [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:href "#" :title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
       [:i.fa.fa-remove.fa-fw] "Close Menu"]
-     [:a.w3-padding.w3-blue {:href "#"}
-      [:i.fa.fa-users.fa-fw]
-      "Overview"]
-     [:a.w3-padding {:href "/#heroes"}
-      [:i.fa.fa-eye.fa-fw]
-      "Hero stats"]
-     [:a.w3-padding {:href "/#players"}
-      [:i.fa.fa-users.fa-fw]
-      "Player stats"]
-     [:a.w3-padding {:href "/#lans"}
-      [:i.fa.fa-bullseye.fa-fw]
-      "Lan parties"]]))
+     (doall (for [route lanistatsit.routes/route-definitions]
+       (side-navigation-item route)))]))
 
 (defn side-navigation-overlay
   "Dark overlay that is visible on small screens when the side navigation is open.

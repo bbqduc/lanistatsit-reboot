@@ -14,14 +14,17 @@
        (secretary/dispatch! (.-token event))))
     (.setEnabled true)))
 
+(defonce route-definitions
+  [{:view :home :href "/" :text "Overview"}
+   {:view :heroes :href "/heroes" :text "Hero stats"}
+   {:view :players :href "/players" :text "Player stats"}
+   {:view :lans :href "/lans" :text "Lan parties"}])
+
 (defn init-routes []
   (secretary/set-config! :prefix "#")
-  (defroute "/" []
-    (re-frame/dispatch [:set-current-view :home]))
-  (defroute "/heroes" []
-    (re-frame/dispatch [:set-current-view :heroes]))
-  (defroute "/players" []
-    (re-frame/dispatch [:set-current-view :players]))
-  (defroute "/lans" []
-    (re-frame/dispatch [:set-current-view :lans]))
+  (dorun
+    (map
+      #(do
+         (defroute (:href %1) []
+           (re-frame/dispatch [:set-current-view (:view %1)]))) route-definitions))
   (hook-browser-navigation!))

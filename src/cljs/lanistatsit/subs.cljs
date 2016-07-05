@@ -21,3 +21,8 @@
   :menu-display-css
   (fn [db _]
     (reaction (:menu-display-css @db))))
+
+(re-frame/register-sub
+  :menu-active-view
+  (fn [db _]
+    (reaction (:menu-active-view @db))))

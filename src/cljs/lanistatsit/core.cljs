@@ -19,7 +19,7 @@
 
 (defn ^:export init []
   (re-frame/dispatch-sync [:initialize-db])
-  (routes/init-routes)
   (dev-setup)
+  (routes/init-routes)
   (re-frame/dispatch-sync [:request-hero-stats])
   (mount-root))
