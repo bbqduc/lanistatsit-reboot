@@ -15,52 +15,9 @@
 
 <body class="w3-light-grey">
 
-<!-- TODO: Create a react component out of this? -->
-<!-- Top container -->
-<div class="w3-container w3-top w3-black w3-large w3-padding" style="z-index:4">
-  <button class="w3-btn w3-hide-large w3-padding-0 w3-hover-text-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-right">Lanistatsit</span>
-</div>
-
-<!-- TODO: Create a react component out of this? -->
-<!-- Sidenav/menu -->
-<nav class="w3-sidenav w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidenav"><br>
-  <a href="#" class="w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-  <a href="#overview" class="w3-padding w3-blue"><i class="fa fa-users fa-fw"></i> Overview</a>
-  <a href="#heroes" class="w3-padding"><i class="fa fa-eye fa-fw"></i> Hero stats</a>
-  <a href="#players" class="w3-padding"><i class="fa fa-users fa-fw"></i> Player stats</a>
-  <a href="#lans" class="w3-padding"><i class="fa fa-bullseye fa-fw"></i> Lan parties</a>
-</nav>
-
-
-<!-- Overlay effect when opening sidenav on small screens -->
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-<!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
-  <!-- TODO: Create a react component out of this? -->
-  <!-- Header -->
-  <header class="w3-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> Overview</b></h5>
-  </header>
-
-  <div id="app" class="w3-container"></div>
-  <script src="js/compiled/app.js"></script>
-  <script>lanistatsit.core.init();</script>
-</div>
-
-<script>
-// Script to open and close sidenav
-function w3_open() {
-    document.getElementById("mySidenav").style.display = "block";
-    document.getElementById("myOverlay").style.display = "block";
-}
-function w3_close() {
-    document.getElementById("mySidenav").style.display = "none";
-    document.getElementById("myOverlay").style.display = "none";
-}
-</script>
+<div id="app"></div>
+<script src="js/compiled/app.js"></script>
+<script>lanistatsit.core.init();</script>
 
 </body>
 </html>

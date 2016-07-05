@@ -18,6 +18,10 @@
   (secretary/set-config! :prefix "#")
   (defroute "/" []
     (re-frame/dispatch [:set-current-view :home]))
-  (defroute "/halloo" []
-    (re-frame/dispatch [:set-current-view :halloo]))
+  (defroute "/heroes" []
+    (re-frame/dispatch [:set-current-view :heroes]))
+  (defroute "/players" []
+    (re-frame/dispatch [:set-current-view :players]))
+  (defroute "/lans" []
+    (re-frame/dispatch [:set-current-view :lans]))
   (hook-browser-navigation!))

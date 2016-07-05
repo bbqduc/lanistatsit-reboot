@@ -6,4 +6,5 @@
    :data []
    :players [{:name "Player1"}
              {:name "Player2"}]
-   :view :home})
+   :view :home
+   :menu-display-css "none"})

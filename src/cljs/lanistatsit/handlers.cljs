@@ -55,3 +55,15 @@
  :set-current-view
  (fn  [db [_ view]]
    (assoc db :view view)))
+
+(re-frame/register-handler
+  :open-menu
+  (fn
+    [db _]
+    (assoc db :menu-display-css "block")))
+
+(re-frame/register-handler
+  :close-menu
+  (fn
+    [db _]
+    (assoc db :menu-display-css "none")))

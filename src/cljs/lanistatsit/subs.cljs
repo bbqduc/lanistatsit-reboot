@@ -16,3 +16,8 @@
             newdata (sort-by (:sort-key table-info) data)
             ret (if (:sort-reverse table-info) (reverse newdata) newdata)]
         (with-meta ret {:sort-key (:sort-key table-info) :reverse (:sort-reverse table-info)})))))
+
+(re-frame/register-sub
+  :menu-display-css
+  (fn [db _]
+    (reaction (:menu-display-css @db))))
