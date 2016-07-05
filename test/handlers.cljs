@@ -1,8 +1,7 @@
 (ns test.handlers
   (:require
-    [cljs.test :refer-macros [deftest testing is]]
-    [lanistatsit.handlers :as handlers]
-    ))
+   [cljs.test :refer-macros [deftest testing is]]
+   [lanistatsit.handlers :as handlers]))
 
 (defn- call-sort-and-validate [db newdb newkey]
   (= (handlers/set-sort-handler db newkey :test-table) newdb))

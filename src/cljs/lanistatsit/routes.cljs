@@ -23,8 +23,8 @@
 (defn init-routes []
   (secretary/set-config! :prefix "#")
   (dorun
-    (map
-      #(do
-         (defroute (:href %1) []
-           (re-frame/dispatch [:set-current-view (:view %1)]))) route-definitions))
+   (map
+    #(do
+       (defroute (:href %1) []
+         (re-frame/dispatch [:set-current-view (:view %1)]))) route-definitions))
   (hook-browser-navigation!))

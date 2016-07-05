@@ -17,8 +17,8 @@
         flip (= oldkey newkey)
         newreverse (if flip (not oldreverse) true)]
     (if (= oldkey nil) db
-      (assoc db dbkey {:sort-key newkey
-                       :sort-reverse newreverse}))))
+        (assoc db dbkey {:sort-key newkey
+                         :sort-reverse newreverse}))))
 
 (re-frame/register-handler
  :set-sort
@@ -57,13 +57,13 @@
    (assoc db :view view)))
 
 (re-frame/register-handler
-  :open-menu
-  (fn
-    [db _]
-    (assoc db :menu-display-css "block")))
+ :open-menu
+ (fn
+   [db _]
+   (assoc db :menu-display-css "block")))
 
 (re-frame/register-handler
-  :close-menu
-  (fn
-    [db _]
-    (assoc db :menu-display-css "none")))
+ :close-menu
+ (fn
+   [db _]
+   (assoc db :menu-display-css "none")))
