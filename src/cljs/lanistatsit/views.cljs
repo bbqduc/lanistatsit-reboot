@@ -119,12 +119,12 @@
            [:tbody
             (map-indexed #(table-row %2 data-keys %1) data)]]))))
 
-(defn home-did-mount [this]
+(defn table-did-mount [this]
   (.DataTable (js/$ (reagent/dom-node this))))
 
 (defn tableclass []
   (reagent/create-class {:reagent-render table-render
-                         :component-did-mount home-did-mount}))
+                         :component-did-mount table-did-mount}))
 
 (defn heroes []
   [:div.w3-container.w3-row-padding.w3-margin-bottom
