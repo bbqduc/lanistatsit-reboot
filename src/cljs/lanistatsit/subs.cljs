@@ -27,6 +27,16 @@
     (:players @db))))
 
 (re-frame/register-sub
+ :table-data
+ (fn [db [_ data-key table-info-key]]
+   (let [data-sub (re-frame/subscribe [data-key])]
+     (reaction
+      (let [table-info (get @db table-info-key)
+            newdata (sort-by (:sort-key table-info) @data-sub)
+            ret (if (:sort-reverse table-info) (reverse newdata) newdata)]
+        (assoc table-info :data ret))))))
+
+(re-frame/register-sub
  :menu-display-css
  (fn [db _]
    (reaction (:menu-display-css @db))))
