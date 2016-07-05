@@ -1,6 +1,7 @@
 (ns lanistatsit.subs
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :as re-frame]))
+            ;[cljs.core.match :refer-macros [match]]))
 
 (re-frame/register-sub
  :current-view
@@ -8,19 +9,20 @@
    (reaction (:view @db))))
 
 (defn winrate [wins losses]
-  (* 100 (/ wins (+ wins losses))))
+  (if (and (zero? wins) (zero? losses))
+    0
+    (* 100 (/ wins (+ wins losses)))))
 
 (re-frame/register-sub
  :hero-stats
- (fn [db]
+ (fn [db _]
    (reaction
-    (let [data (:data @db)]
-      (map #(assoc % :winrate (winrate (:wins %) (:losses %)))
-           data)))))
+    (map #(assoc % :winrate (winrate (:wins %) (:losses %)))
+         (:data @db)))))
 
 (re-frame/register-sub
  :player-stats
- (fn [db]
+ (fn [db _]
    (reaction
     (:players @db))))
 
@@ -30,8 +32,7 @@
    (let [data-sub (re-frame/subscribe [data-key])]
      (reaction
       (let [table-info (get @db table-info-key)
-            data @data-sub
-            newdata (sort-by (:sort-key table-info) data)
+            newdata (sort-by (:sort-key table-info) @data-sub)
             ret (if (:sort-reverse table-info) (reverse newdata) newdata)]
         (assoc table-info :data ret))))))
 

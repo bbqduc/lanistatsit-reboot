@@ -1,6 +1,7 @@
 (ns lanistatsit.handlers
   (:require [re-frame.core :as re-frame]
             [lanistatsit.db :as db]
+            [lanistatsit.config :as config]
             [ajax.core :refer [GET]]))
 
 (re-frame/register-handler
@@ -44,12 +45,22 @@
    (let [data (get resp :_field0)]
      (assoc db :data data))))
 
+(defn populate-with-test-data [db]
+  (let [num-heroes (+ 10 (rand-int 10))]
+    (assoc db :data
+           (for [x (range 1 (inc num-heroes))]
+             {:name (str "Hero" x)
+              :wins (rand-int 30)
+              :losses (rand-int 30)}))))
+
 (re-frame/register-handler
  :process-stats-failed
  (fn
    [db [_ resp]]
-   (print (str "Failed"))
-   db))
+   (if config/debug?
+     (populate-with-test-data db)
+     (do print (str "Failed")
+         db))))
 
 (re-frame/register-handler
  :set-current-view
