@@ -1,8 +1,7 @@
 (ns lanistatsit.views
   (:require [re-frame.core :as re-frame]
             [goog.string :as gstring]
-            [goog.string.format]
-            ))
+            [goog.string.format]))
 
 (defonce lans-data [{:lan "Lan 1", :wins 10, :losses 8}
                     {:lan "Lan 2", :wins 15, :losses 11}])
@@ -10,16 +9,16 @@
 (defmulti view-nav-icon identity)
 (defmethod view-nav-icon :home [] "fa-dashboard")
 (defmethod view-nav-icon :heroes [] "fa-eye")
-(defmethod view-nav-icon :players []"fa-users")
+(defmethod view-nav-icon :players [] "fa-users")
 (defmethod view-nav-icon :lans [] "fa-bullseye")
 
 (defn sortable-table-row [data data-keys id]
   ^{:key id} [:tr
-   (for [data-key data-keys]
-     (let [trans (:transform data-key)
-           value (get data (:key data-key))
-           content (if (nil? trans) value (trans value))]
-       ^{:key (name (:key data-key))} [:td content]))])
+              (for [data-key data-keys]
+                (let [trans (:transform data-key)
+                      value (get data (:key data-key))
+                      content (if (nil? trans) value (trans value))]
+                  ^{:key (name (:key data-key))} [:td content]))])
 
 (defn sort-icon
   "Sorting icon for lists"
@@ -45,15 +44,13 @@
           (for [data-key (map #(get-in % [:key]) data-keys)]
             (sortable-table-header-cell table-id data-key sort-key reversed?))]
          [:tbody
-          (map-indexed #(sortable-table-row %2 data-keys %1) data)
-          ]]))))
+          (map-indexed #(sortable-table-row %2 data-keys %1) data)]]))))
 
 (defn percentage-string [percentage]
   (str (* 100 percentage) "%"))
 
 (defn winrate-string [wins losses]
-  (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses))))
-  )
+  (gstring/format "Winrate: %.2f%" (percentage-string (/ wins (+ wins losses)))))
 
 (defn test-statsbox [stats]
   (let [lan (:lan stats)
@@ -75,7 +72,7 @@
         [:div.w3-container.w3-red.w3-padding-16
          [:div.w3-left
           [:i.fa.fa-bar-chart.w3-xxxlarge]]
-          ^{:key lan} (test-statsbox lan)]])]))
+         ^{:key lan} (test-statsbox lan)]])]))
 
 (defn top-bar
   "Black bar on top of the app"
@@ -103,7 +100,7 @@
      [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
       [:i.fa.fa-remove.fa-fw] "Close Menu"]
      (doall (for [route lanistatsit.routes/route-definitions]
-       (side-navigation-item route)))]))
+              (side-navigation-item route)))]))
 
 (defn side-navigation-overlay
   "Dark overlay that is visible on small screens when the side navigation is open.
@@ -130,20 +127,20 @@
          [:i.fa.fa-dashboard]
          (str " " text)]]])
 
-
 (defn heroes []
   [:div.w3-container.w3-row-padding.w3-margin-bottom
    [:h4 "Hero stats for all LANs"]
-   ^{:key "heroes-table"}[sortable-table :data :herostats-table
-    [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
-     {:key :wins}
-     {:key :losses}]]])
+   ^{:key "heroes-table"} [sortable-table :hero-stats :herostats-table
+                           [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
+                            {:key :wins}
+                            {:key :losses}
+                            {:key :winrate :transform (fn [x] (gstring/format "%.1f%" x))}]]])
 
 (defn players []
   [:div.w3-container.w3-row-padding.w3-margin-bottom {:id "playerstatslabel"}
    [:h4 "Player stats for all LANs"]
-   ^{:key "players-table"}[sortable-table :players :players-table
-    [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]]])
+   ^{:key "players-table"} [sortable-table :player-stats :players-table
+                            [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]]])
 
 (defn lans []
   [lan-list lans-data])
@@ -153,8 +150,7 @@
    (header "Overview")
    (lans)
    (heroes)
-   (players)
-   ])
+   (players)])
 
 (defmulti views identity)
 (defmethod views :home [] (main-container index))
