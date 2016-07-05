@@ -1,7 +1,8 @@
 (ns lanistatsit.views
   (:require [re-frame.core :as re-frame]
             [goog.string :as gstring]
-            [goog.string.format]))
+            [goog.string.format]
+            [reagent.core :as reagent]))
 
 (defonce lans-data [{:lan "Lan 1", :wins 10, :losses 8}
                     {:lan "Lan 2", :wins 15, :losses 11}])
@@ -11,40 +12,6 @@
 (defmethod view-nav-icon :heroes [] "fa-eye")
 (defmethod view-nav-icon :players [] "fa-users")
 (defmethod view-nav-icon :lans [] "fa-bullseye")
-
-(defn sortable-table-row [data data-keys id]
-  ^{:key id} [:tr
-              (for [data-key data-keys]
-                (let [trans (:transform data-key)
-                      value (get data (:key data-key))
-                      content (if (nil? trans) value (trans value))]
-                  ^{:key (name (:key data-key))} [:td content]))])
-
-(defn sort-icon
-  "Sorting icon for lists"
-  [reversed?]
-  (if reversed? "\u25bc" "\u25b2"))
-
-(defn sortable-table-header-cell [table-id data-key sort-key reversed?]
-  ^{:key (name data-key)}
-  [:th
-   {:on-click #(re-frame/dispatch [:set-sort data-key table-id])}
-   (name data-key)
-   (let [icon (if (= (name sort-key) (name data-key)) (sort-icon reversed?) "")]
-     [:span.sort-icon icon])])
-
-(defn sortable-table [data-id table-id data-keys table-modifiers]
-  (let [sub (re-frame/subscribe [:table-data data-id table-id])]
-    (fn []
-      (let [{sort-key :sort-key
-             reversed? :sort-reverse
-             data :data} @sub]
-        [:table.w3-table.w3-striped.w3-white table-modifiers
-         [:thead
-          (for [data-key (map #(get-in % [:key]) data-keys)]
-            (sortable-table-header-cell table-id data-key sort-key reversed?))]
-         [:tbody
-          (map-indexed #(sortable-table-row %2 data-keys %1) data)]]))))
 
 (defn percentage-string [percentage]
   (str (* 100 percentage) "%"))
@@ -130,10 +97,39 @@
          [:i.fa.fa-dashboard]
          (str " " text)]]])
 
+(defn lans []
+  [lan-list lans-data])
+
+(defn table-row [data data-keys id]
+  ^{:key id} [:tr
+              (for [data-key data-keys]
+                (let [trans (:transform data-key)
+                      value (get data (:key data-key))
+                      content (if (nil? trans) value (trans value))]
+                  ^{:key (name (:key data-key))} [:td content]))])
+
+(defn table-render [data-id table-id data-keys table-modifiers]
+    (let [sub (re-frame/subscribe [data-id])]
+      (fn []
+        (let [data @sub]
+          [:table.w3-table.w3-striped.w3-white table-modifiers
+           [:thead
+            (for [data-key (map #(get-in % [:key]) data-keys)]
+              [:th (name data-key)])]
+           [:tbody
+            (map-indexed #(table-row %2 data-keys %1) data)]]))))
+
+(defn home-did-mount [this]
+  (.DataTable (js/$ (reagent/dom-node this))))
+
+(defn tableclass []
+  (reagent/create-class {:reagent-render table-render
+                         :component-did-mount home-did-mount}))
+
 (defn heroes []
   [:div.w3-container.w3-row-padding.w3-margin-bottom
    [:h4 "Hero stats for all LANs"]
-   ^{:key "heroes-table"} [sortable-table :hero-stats :herostats-table
+   ^{:key "heroes-table"} [tableclass :hero-stats :herostats-table
                            [{:key :name, :transform (fn [x] [:a {:href (str "/hero/" x)} x])}
                             {:key :wins}
                             {:key :losses}
@@ -142,18 +138,17 @@
 (defn players []
   [:div.w3-container.w3-row-padding.w3-margin-bottom {:id "playerstatslabel"}
    [:h4 "Player stats for all LANs"]
-   ^{:key "players-table"} [sortable-table :player-stats :players-table
+   ^{:key "players-table"} [tableclass :player-stats :players-table
                             [{:key :name, :transform (fn [x] [:a {:href (str "/player/" x)} x])}]]])
 
-(defn lans []
-  [lan-list lans-data])
 
 (defn index []
   [:div
    (header "Overview")
    (lans)
    (heroes)
-   (players)])
+   (players)
+   ])
 
 (defmulti views identity)
 (defmethod views :home [] (main-container index))
