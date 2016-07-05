@@ -87,35 +87,38 @@
   "One entry for the side navigation bar"
   [def]
   (let [active (re-frame/subscribe [:current-view])]
-    ^{:key (:href def)}
-    [:a.w3-padding {:href (str "/#" (.substr (:href def) 1)) :class (if (= (:view def) @active) "w3-blue" "")}
-     [:i.fa {:class (view-nav-icon (:view def))}]
-     (str " " (:text def))]))
+    (fn []
+      ^{:key (:href def)}
+      [:a.w3-padding {:href (str "/#" (.substr (:href def) 1)) :class (if (= (:view def) @active) "w3-blue" "")}
+       [:i.fa {:class (view-nav-icon (:view def))}]
+       (str " " (:text def))])))
 
 (defn side-navigation
   "Side navigation bar"
   []
   (let [menu-display-css (re-frame/subscribe [:menu-display-css])]
-    [:nav.w3-sidenav.w3-collapse.w3-white.w3-animate-left {:style {:zIndex 3 :width "300px" :display @menu-display-css}}
-     [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
-      [:i.fa.fa-remove.fa-fw] "Close Menu"]
-     (doall (for [route lanistatsit.routes/route-definitions]
-              (side-navigation-item route)))]))
+    (fn []
+      [:nav.w3-sidenav.w3-collapse.w3-white.w3-animate-left {:style {:zIndex 3 :width "300px" :display @menu-display-css}}
+       [:a.w3-padding-16.w3-hide-large.w3-dark-grey.w3-hover-black {:title "close menu" :on-click #(re-frame/dispatch [:close-menu])}
+        [:i.fa.fa-remove.fa-fw] "Close Menu"]
+       (doall (for [route lanistatsit.routes/route-definitions]
+                [side-navigation-item route]))])))
 
 (defn side-navigation-overlay
   "Dark overlay that is visible on small screens when the side navigation is open.
   In a different component because it has to be outside the <nav> of side-navigation"
   []
   (let [menu-display-css (re-frame/subscribe [:menu-display-css])]
-    [:div.w3-overlay.w3-hide-large.w3-animate-opacity {:style {:cursor "pointer" :display @menu-display-css} :title "close side menu"}]))
+    (fn []
+      [:div.w3-overlay.w3-hide-large.w3-animate-opacity {:style {:cursor "pointer" :display @menu-display-css} :title "close side menu"}])))
 
 (defn main-container
   "Container where page content sits in"
   [content]
   [:div
    (top-bar)
-   (side-navigation)
-   (side-navigation-overlay)
+   [side-navigation]
+   [side-navigation-overlay]
    [:div.w3-main {:style {:marginLeft "300px" :marginTop "43px"}}
     (content)]])
 
