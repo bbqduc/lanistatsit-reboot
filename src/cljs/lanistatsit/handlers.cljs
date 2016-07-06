@@ -58,9 +58,8 @@
  (fn
    [db [_ resp]]
    (if config/debug?
-     (populate-with-test-data db)
-     (do print (str "Failed")
-         db))))
+     (populate-with-test-data db))
+     db))
 
 (re-frame/register-handler
  :set-table-filter
