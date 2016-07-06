@@ -42,6 +42,7 @@
                                :output-to            "resources/public/js/compiled/app.js"
                                :output-dir           "resources/public/js/compiled/out"
                                :asset-path           "js/compiled/out"
+                               :externs ["externs.js"]
                                :source-map-timestamp true}}
 
                {:id           "min"
@@ -50,6 +51,7 @@
                                :output-to       "resources/public/js/compiled/app.js"
                                :optimizations   :advanced
                                :closure-defines {goog.DEBUG false}
+                               :externs ["externs.js"]
                                :pretty-print    false}}
 
                {:id "test"
@@ -61,5 +63,5 @@
                            :cache-analysis false
                            :pretty-print true}}
                ]
-              :externs ["externs.js"]}
+              }
   )
