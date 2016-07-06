@@ -1,7 +1,8 @@
 (ns lanistatsit.views
   (:require [re-frame.core :as re-frame]
             [goog.string :as gstring]
-            [goog.string.format]))
+            [goog.string.format]
+            [reagent.core :as reagent]))
 
 (defonce lans-data [{:lan "Lan 1", :wins 10, :losses 8}
                     {:lan "Lan 2", :wins 15, :losses 11}])
@@ -11,6 +12,60 @@
 (defmethod view-nav-icon :heroes [] "fa-eye")
 (defmethod view-nav-icon :players [] "fa-users")
 (defmethod view-nav-icon :lans [] "fa-bullseye")
+
+(def chart-config
+  {:chart {:type "line"}
+   :title {:text "Average networth chart"}
+   :subtitle {:text nil}
+   :xAxis {:title {:text "Minutes"}
+           :min 0}
+   :yAxis {:title {:text "Net worth difference"
+                   :align "high"}
+           :labels {:overflow "justify"}}
+   :tooltip {}
+   :plotOptions {:bar {:dataLabels {:enabled true}}}
+   :legend {:layout "vertical"
+            :align "right"
+            :verticalAlign "top"
+            :x -40
+            :y 100
+            :floating true
+            :borderWidth 1
+            :shadow true}
+   :credits {:enabled false}
+   :series [{:name "Wins"
+             :color "green"
+             :data [[0 0]
+                    [5 2500]
+                    [10 4000]
+                    [15 10000]
+                    [20 15000]
+                    [25 20000]
+                    ]}
+            {:name "Losses"
+             :color "red"
+             :data [[0 0]
+                    [5 500]
+                    [10 -1000]
+                    [15 -3000]
+                    [20 -10000]
+                    [25 -15000]
+                    ]}
+            ]
+   })
+
+(defn chart-render []
+  [:div {:style {:min-width "310px"
+                 :max-width "800px"
+                 :height "400px"
+                 :margin "0 auto"}}])
+
+(defn chart-did-mount [this]
+  (js/Highcharts.Chart. (reagent/dom-node this) (clj->js chart-config)))
+
+(defn chart []
+  (reagent/create-class {:reagent-render chart-render
+                         :component-did-mount chart-did-mount}))
 
 (defn sortable-table-row [data data-keys id]
   ^{:key id} [:tr
@@ -154,7 +209,8 @@
    (header "Overview")
    (lans)
    (heroes)
-   (players)])
+   (players)
+   [chart]])
 
 (defmulti views identity)
 (defmethod views :home [] (main-container index))

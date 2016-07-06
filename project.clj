@@ -60,5 +60,6 @@
                            :optimizations :none
                            :cache-analysis false
                            :pretty-print true}}
-               ]}
+               ]
+              :externs ["externs.js"]}
   )
