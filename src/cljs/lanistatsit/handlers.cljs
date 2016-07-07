@@ -58,8 +58,8 @@
  (fn
    [db [_ resp]]
    (if config/debug?
-     (populate-with-test-data db))
-     db))
+     (populate-with-test-data db)
+     db)))
 
 (re-frame/register-handler
  :set-table-filter
